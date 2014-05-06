@@ -94,10 +94,10 @@ public class Project {
 			System.out.println("GUEST options");
 			System.out.println("\t1.  List all routes");
 			System.out.println("\t2.  List passport routes");
-			System.out.println("\t3.  Get direction from stop A to stop B (without bus transfer)");
-			System.out.println("\t4.  Get direction from stop A to stop B (with 1 bus transfer)");
+			System.out.println("\t3.  Get directions from stop A to stop B (without bus transfer)");
+			System.out.println("\t4.  Get directions from stop A to stop B (with 1 bus transfer)");
 			System.out.println("\t5.  Get stops on route (between stop A and B)");
-			System.out.println("\t6.  Get arrival time for stop");
+			System.out.println("\t6.  Get arrival times for stop");
 			System.out.println("\nADMIN options");
 			System.out.println("\t7.  List all the data for a given route");
 			System.out.println("\t8.  List of all the bus drivers");
@@ -129,7 +129,7 @@ public class Project {
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
 			case 6:  System.out.println("OPTION = case 6: ");break;
-			case 7:  System.out.println("OPTION = case 7: ");break;
+			case 7:  listRouteData();break;
 			case 8:  listDrivers();break;
 			case 9:  listStops();break;
 			case 10: System.out.println("OPTION = case 10:");break;
@@ -182,6 +182,31 @@ public class Project {
 	}
 	
 	// Admin Functions
+	static void listRouteData() {
+		System.out.print("Enter route number: ");
+		int targetRouteNum = in.nextInt();
+		in.nextLine();
+		System.out.println("Querying route data...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT stopNum FROM arriveTime WHERE routeNum = '%d'", targetRouteNum));
+			
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %4s\n", "Stop");
+				while(result.next()) {
+					int stopNum = result.getInt("stopNum");
+					System.out.format("%3d: %4d\n", ++n, stopNum);
+				}
+			}
+			else
+				System.out.println("0 rows returned.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
 	static void listDrivers() {
 		System.out.println("Querying drivers...");
 		try {
