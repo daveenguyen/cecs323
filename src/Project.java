@@ -92,27 +92,26 @@ public class Project {
 
 	static void printMenu() {
 			System.out.println("GUEST options");
-			System.out.println("\t1. List all routes");
-			System.out.println("\t2. List passport routes");
-			System.out.println("\t3. Get direction from stop A to stop B (without bus transfer)");
-			System.out.println("\t4. Get direction from stop A to stop B (with 1 bus transfer)");
-			System.out.println("\t5. Get stops on route (between stop A and B)");
-			System.out.println("\t6. Get arrival time for stop");
-			System.out.println("\t0. Exit Program");
+			System.out.println("\t1.  List all routes");
+			System.out.println("\t2.  List passport routes");
+			System.out.println("\t3.  Get direction from stop A to stop B (without bus transfer)");
+			System.out.println("\t4.  Get direction from stop A to stop B (with 1 bus transfer)");
+			System.out.println("\t5.  Get stops on route (between stop A and B)");
+			System.out.println("\t6.  Get arrival time for stop");
 			System.out.println("\nADMIN options");
-			System.out.println("\t1.  List all the data for a given route");
-			System.out.println("\t2.  List of all the bus drivers");
-			System.out.println("\t3.  List of all the stops");
-			System.out.println("\t4.  List of the service reports");
-			System.out.println("\t5.  Assign stop to route");
-			System.out.println("\t6.  Assign driver to route");
-			System.out.println("\t7.  Assign bus to route");
-			System.out.println("\t8.  Create new bus stop");
-			System.out.println("\t9.  Create new route");
-			System.out.println("\t10. Update stop");
-			System.out.println("\t11. Update route");
-			System.out.println("\t12. Delete stop");
-			System.out.println("\t13. Delete route");
+			System.out.println("\t7.  List all the data for a given route");
+			System.out.println("\t8.  List of all the bus drivers");
+			System.out.println("\t9.  List of all the stops");
+			System.out.println("\t10. List of the service reports");
+			System.out.println("\t11. Assign stop to route");
+			System.out.println("\t12. Assign driver to route");
+			System.out.println("\t13. Assign bus to route");
+			System.out.println("\t14. Create new bus stop");
+			System.out.println("\t15. Create new route");
+			System.out.println("\t16. Update stop");
+			System.out.println("\t17. Update route");
+			System.out.println("\t18. Delete stop");
+			System.out.println("\t19. Delete route");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -125,18 +124,24 @@ public class Project {
 		switch (option) {
 			case 0:  System.out.println("OPTION = case 0: ");break;
 			case 1:  listRoutes();break;
-			case 2:  listDrivers();break;
+			case 2:  System.out.println("OPTION = case 2: ");break;
 			case 3:  System.out.println("OPTION = case 3: ");break;
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
 			case 6:  System.out.println("OPTION = case 6: ");break;
 			case 7:  System.out.println("OPTION = case 7: ");break;
-			case 8:  System.out.println("OPTION = case 8: ");break;
+			case 8:  listDrivers();break;
 			case 9:  System.out.println("OPTION = case 9: ");break;
 			case 10: System.out.println("OPTION = case 10:");break;
 			case 11: System.out.println("OPTION = case 11:");break;
 			case 12: System.out.println("OPTION = case 12:");break;
 			case 13: System.out.println("OPTION = case 13:");break;
+			case 14: System.out.println("OPTION = case 14:");break;
+			case 15: System.out.println("OPTION = case 15:");break;
+			case 16: System.out.println("OPTION = case 16:");break;
+			case 17: System.out.println("OPTION = case 17:");break;
+			case 18: System.out.println("OPTION = case 18:");break;
+			case 19: System.out.println("OPTION = case 19:");break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
