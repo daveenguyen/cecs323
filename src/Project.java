@@ -11,13 +11,13 @@ public class Project {
 
 	final static String BUS_SERVICE_NAME = "SADJ Bus Service";
 	static Scanner in = new Scanner(System.in);
+	static Connection conn = null;
 
 	public static void main(String[] args) {
 		boolean isGuest;
 		String URL = "jdbc:mysql://localhost/323project";
 		String USER = "root";
 		String PASS = "";
-		Connection conn = null;
 
 		try {
 			// Register JDBC driver
@@ -124,7 +124,7 @@ public class Project {
 		if (isGuest) {
 			switch (option) {
 				case 0:  System.out.println("OPTION = case 0: ");break;
-				case 1:  System.out.println("OPTION = case 1: ");break;
+				case 1:  listRoutes();break;
 				case 2:  System.out.println("OPTION = case 2: ");break;
 				case 3:  System.out.println("OPTION = case 3: ");break;
 				case 4:  System.out.println("OPTION = case 4: ");break;
@@ -151,5 +151,23 @@ public class Project {
 				default: System.out.println("OPTION = default:");break;
 			}
 		}
+	}
+
+	// Guest Functions
+	static void listRoutes() {
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM route");
+
+			while(result.next()) {
+				int routeNum = result.getInt("routeNum");
+				String direction = result.getString("direction");
+				System.out.println("Route " + routeNum + " (" + direction + ")");
+			}
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+
 	}
 }
