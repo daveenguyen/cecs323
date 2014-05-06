@@ -14,7 +14,7 @@ public class Project {
 	static Connection conn = null;
 
 	public static void main(String[] args) {
-		boolean isGuest;
+//		boolean isGuest;
 		String URL = "jdbc:mysql://localhost/323project";
 		String USER = "root";
 		String PASS = "";
@@ -125,7 +125,7 @@ public class Project {
 		switch (option) {
 			case 0:  System.out.println("OPTION = case 0: ");break;
 			case 1:  listRoutes();break;
-			case 2:  System.out.println("OPTION = case 2: ");break;
+			case 2:  listDrivers();break;
 			case 3:  System.out.println("OPTION = case 3: ");break;
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
@@ -148,11 +148,41 @@ public class Project {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM route");
 
-			while(result.next()) {
-				int routeNum = result.getInt("routeNum");
-				String direction = result.getString("direction");
-				System.out.println("Route " + routeNum + " (" + direction + ")");
+			if(result.isBeforeFirst())
+				while(result.next()) {
+					int routeNum = result.getInt("routeNum");
+					String direction = result.getString("direction");
+					System.out.println("Route " + routeNum + " (" + direction + ")");
+				}
+			else
+				System.out.println("0 rows returned.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	// Admin Functions
+	static void listDrivers() {
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM driver");
+			
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %8s%22s%4s%11s%33s\n", "License", "Name", "Age", "Qualified", "Address");
+				while(result.next()) {
+					String driverLicense = result.getString("driverLicense");
+					String name = result.getString("name");
+					int age = result.getInt("age");
+					String address = result.getString("address");
+					String lastQTest = result.getString("lastQTest");
+					System.out.format("%3d: %8s%22s%4d%11s%33s\n", ++n, driverLicense, name, age, lastQTest, address);
+				}
 			}
+			else
+				System.out.println("0 rows returned.");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
