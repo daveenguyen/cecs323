@@ -131,7 +131,7 @@ public class Project {
 			case 6:  System.out.println("OPTION = case 6: ");break;
 			case 7:  System.out.println("OPTION = case 7: ");break;
 			case 8:  listDrivers();break;
-			case 9:  System.out.println("OPTION = case 9: ");break;
+			case 9:  listStops();break;
 			case 10: System.out.println("OPTION = case 10:");break;
 			case 11: System.out.println("OPTION = case 11:");break;
 			case 12: System.out.println("OPTION = case 12:");break;
@@ -169,6 +169,7 @@ public class Project {
 	
 	// Admin Functions
 	static void listDrivers() {
+		System.out.println("Querying drivers...");
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM driver");
@@ -184,6 +185,30 @@ public class Project {
 					String address = result.getString("address");
 					String lastQTest = result.getString("lastQTest");
 					System.out.format("%3d: %8s%22s%4d%11s%33s\n", ++n, driverLicense, name, age, lastQTest, address);
+				}
+			}
+			else
+				System.out.println("0 rows returned.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listStops() {
+		System.out.println("Querying stops...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM stop");
+			
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %3s%33s%25s\n", "Num", "Cross-Streets", "Place");
+				while(result.next()) {
+					int stopNum = result.getInt("stopNum");
+					String crossStreets = result.getString("crossStreets");
+					String place = result.getString("place");
+					System.out.format("%3d: %3d%33s%25s\n", ++n, stopNum, crossStreets, place);
 				}
 			}
 			else
