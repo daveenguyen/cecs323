@@ -1,4 +1,4 @@
-package project;
+//package project;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -128,7 +128,7 @@ public class Project {
 			case 3:  System.out.println("OPTION = case 3: ");break;
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
-			case 6:  System.out.println("OPTION = case 6: ");break;
+			case 6:  listArrivalTimes();break;
 			case 7:  listRouteData();break;
 			case 8:  listDrivers();break;
 			case 9:  listStops();break;
@@ -173,6 +173,32 @@ public class Project {
 					String direction = result.getString("direction");
 					System.out.println("Route " + routeNum + " (" + direction + ")");
 				}
+			else
+				System.out.println("0 rows returned.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listArrivalTimes() {
+		System.out.print("Enter stop number: ");
+		int targetStopNum = in.nextInt();
+		in.nextLine();
+		System.out.println("Querying arrival time data...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT routeNum, time FROM arriveTime WHERE stopNum = '%d' ORDER BY time", targetStopNum));
+			
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %5s%9s\n", "Route", "Time");
+				while(result.next()) {
+					int routeNum = result.getInt("routeNum");
+					String time = result.getString("time");
+					System.out.format("%3d: %5d%9s\n", ++n, routeNum, time);
+				}
+			}
 			else
 				System.out.println("0 rows returned.");
 		}
