@@ -149,9 +149,23 @@ public class Project {
 
 	// Guest Functions
 	static void listRoutes() {
+		System.out.println("Querying routes...");
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM route");
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %3s%12s\n", "Num", "Direction");
+				while(result.next()) {
+					int routeNum = result.getInt("routeNum");
+					String direction = result.getString("direction");
+					System.out.format("%3d: %3d%12s\n", ++n, routeNum, direction);
+				}
+			}
+			else
+				System.out.println("0 rows returned.");
 
 			if(result.isBeforeFirst())
 				while(result.next()) {
