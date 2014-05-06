@@ -37,13 +37,13 @@ public class Project {
 
 		// Print menu
 		printHeader();
-		isGuest = printLogin();
+		// isGuest = printLogin();
 
 		int option;
 		do {
-			printMenu(isGuest);
+			printMenu();
 			option = getMenuOption();
-			parseOption(option, isGuest);
+			parseOption(option);
 		} while (option != 0);
 
 
@@ -90,9 +90,8 @@ public class Project {
 		return option;
 	}
 
-	static void printMenu(boolean isGuest) {
-		if (isGuest) {
-			System.out.println("GUEST menu");
+	static void printMenu() {
+			System.out.println("GUEST options");
 			System.out.println("\t1. List all routes");
 			System.out.println("\t2. List passport routes");
 			System.out.println("\t3. Get direction from stop A to stop B (without bus transfer)");
@@ -100,10 +99,7 @@ public class Project {
 			System.out.println("\t5. Get stops on route (between stop A and B)");
 			System.out.println("\t6. Get arrival time for stop");
 			System.out.println("\t0. Exit Program");
-		}
-		else {
-			System.out.println("ADMIN menu");
-			System.out.println("\t0.  Exit Program");
+			System.out.println("\nADMIN options");
 			System.out.println("\t1.  List all the data for a given route");
 			System.out.println("\t2.  List of all the bus drivers");
 			System.out.println("\t3.  List of all the stops");
@@ -117,39 +113,26 @@ public class Project {
 			System.out.println("\t11. Update route");
 			System.out.println("\t12. Delete stop");
 			System.out.println("\t13. Delete route");
-		}
+			System.out.println("\t0.  Exit Program");
 	}
 
-	static void parseOption(int option, boolean isGuest) {
-		if (isGuest) {
-			switch (option) {
-				case 0:  System.out.println("OPTION = case 0: ");break;
-				case 1:  listRoutes();break;
-				case 2:  System.out.println("OPTION = case 2: ");break;
-				case 3:  System.out.println("OPTION = case 3: ");break;
-				case 4:  System.out.println("OPTION = case 4: ");break;
-				case 5:  System.out.println("OPTION = case 5: ");break;
-				case 6:  System.out.println("OPTION = case 6: ");break;
-				default: System.out.println("OPTION = default:");break;
-			}
-		} else {
-			switch (option) {
-				case 0:  System.out.println("OPTION = case 0: ");break;
-				case 1:  System.out.println("OPTION = case 1: ");break;
-				case 2:  System.out.println("OPTION = case 2: ");break;
-				case 3:  System.out.println("OPTION = case 3: ");break;
-				case 4:  System.out.println("OPTION = case 4: ");break;
-				case 5:  System.out.println("OPTION = case 5: ");break;
-				case 6:  System.out.println("OPTION = case 6: ");break;
-				case 7:  System.out.println("OPTION = case 7: ");break;
-				case 8:  System.out.println("OPTION = case 8: ");break;
-				case 9:  System.out.println("OPTION = case 9: ");break;
-				case 10: System.out.println("OPTION = case 10:");break;
-				case 11: System.out.println("OPTION = case 11:");break;
-				case 12: System.out.println("OPTION = case 12:");break;
-				case 13: System.out.println("OPTION = case 13:");break;
-				default: System.out.println("OPTION = default:");break;
-			}
+	static void parseOption(int option) {
+		switch (option) {
+			case 0:  System.out.println("OPTION = case 0: ");break;
+			case 1:  listRoutes();break;
+			case 2:  System.out.println("OPTION = case 2: ");break;
+			case 3:  System.out.println("OPTION = case 3: ");break;
+			case 4:  System.out.println("OPTION = case 4: ");break;
+			case 5:  System.out.println("OPTION = case 5: ");break;
+			case 6:  System.out.println("OPTION = case 6: ");break;
+			case 7:  System.out.println("OPTION = case 7: ");break;
+			case 8:  System.out.println("OPTION = case 8: ");break;
+			case 9:  System.out.println("OPTION = case 9: ");break;
+			case 10: System.out.println("OPTION = case 10:");break;
+			case 11: System.out.println("OPTION = case 11:");break;
+			case 12: System.out.println("OPTION = case 12:");break;
+			case 13: System.out.println("OPTION = case 13:");break;
+			default: System.out.println("OPTION = default:");break;
 		}
 	}
 
@@ -168,6 +151,5 @@ public class Project {
 		catch (SQLException e) {
 			System.out.println(e.toString());
 		}
-
 	}
 }
