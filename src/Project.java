@@ -116,6 +116,11 @@ public class Project {
 			System.out.println("\t0.  Exit Program");
 	}
 
+	static void confirm() {
+		System.out.println("Press ENTER to continue...");
+		in.nextLine();
+	}
+	
 	static void parseOption(int option) {
 		switch (option) {
 			case 0:  System.out.println("OPTION = case 0: ");break;
@@ -134,6 +139,7 @@ public class Project {
 			case 13: System.out.println("OPTION = case 13:");break;
 			default: System.out.println("OPTION = default:");break;
 		}
+		confirm();
 	}
 
 	// Guest Functions
