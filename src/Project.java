@@ -226,7 +226,7 @@ public class Project {
 		System.out.println("Querying direction...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery(String.format("SELECT t1.routeNum FROM  (SELECT * FROM arrivetime WHERE stopnum='%d') as t1 INNER JOIN (SELECT * FROM arrivetime WHERE stopnum='%d') as t2 ON t1.routeNum=t2.routeNum", startStopNum, endStopNum));
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT t1.routeNum FROM  (SELECT * FROM arrivetime WHERE stopnum='%d') as t1 INNER JOIN (SELECT * FROM arrivetime WHERE stopnum='%d') as t2 ON t1.routeNum=t2.routeNum", startStopNum, endStopNum));
 
 			if(result.isBeforeFirst())
 			{
