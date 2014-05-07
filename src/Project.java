@@ -123,7 +123,7 @@ public class Project {
 		switch (option) {
 			case 0:  System.out.println("OPTION = case 0: ");break;
 			case 1:  listRoutes();break;
-			case 2:  System.out.println("OPTION = case 2: ");break;
+			case 2:  listPassportRoutes();break;
 			case 3:  getDirection();break;
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
@@ -164,13 +164,27 @@ public class Project {
 			}
 			else
 				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listPassportRoutes() {
+		System.out.println("Querying passport routes...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM route WHERE isPassport = TRUE");
 
 			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %3s%12s\n", "Num", "Direction");
 				while(result.next()) {
 					int routeNum = result.getInt("routeNum");
 					String direction = result.getString("direction");
-					System.out.println("Route " + routeNum + " (" + direction + ")");
+					System.out.format("%3d: %3d%12s\n", ++n, routeNum, direction);
 				}
+			}
 			else
 				System.out.println("0 rows returned");
 		}
