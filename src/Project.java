@@ -141,7 +141,7 @@ public class Project {
 			case 16: System.out.println("OPTION = case 16:");break;
 			case 17: System.out.println("OPTION = case 17:");break;
 			case 18: deleteStop();break;
-			case 19: System.out.println("OPTION = case 19:");break;
+			case 19: deleteRoute();break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -347,6 +347,25 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: The stop is referenced by another item in the database.");
+		}
+	}
+	static void deleteRoute()
+	{
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("DELETE FROM route WHERE routeNum = %d", routeNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Route deleted.");
+			else
+				System.out.println("Error: A route does not exist with that route number.");
+		}
+		catch (SQLException e) {
+			System.out.println("Error: The route is referenced by another item in the database.");
 		}
 	}
 }
