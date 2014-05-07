@@ -104,14 +104,13 @@ public class Project {
 			System.out.println("\t9.  List of all the stops");
 			System.out.println("\t10. List of the service reports");
 			System.out.println("\t11. Assign stop to route");
-			System.out.println("\t12. Assign driver to route");
-			System.out.println("\t13. Assign bus to route");
-			System.out.println("\t14. Create new bus stop");
-			System.out.println("\t15. Create new route");
-			System.out.println("\t16. Update stop");
-			System.out.println("\t17. Update route");
-			System.out.println("\t18. Delete stop");
-			System.out.println("\t19. Delete route");
+			System.out.println("\t12. Assign bus/driver to route");
+			System.out.println("\t13. Create new bus stop");
+			System.out.println("\t14. Create new route");
+			System.out.println("\t15. Update stop");
+			System.out.println("\t16. Update route");
+			System.out.println("\t17. Delete stop");
+			System.out.println("\t18. Delete route");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -134,14 +133,13 @@ public class Project {
 			case 9:  listStops();break;
 			case 10: listServiceReports();break;
 			case 11: System.out.println("OPTION = case 11:");break;
-			case 12: System.out.println("OPTION = case 12:");break;
-			case 13: System.out.println("OPTION = case 13:");break;
-			case 14: createStop();break;
-			case 15: createRoute();break;
-			case 16: updateStop();break;
-			case 17: updateRoute();break;
-			case 18: deleteStop();break;
-			case 19: deleteRoute();break;
+			case 12: createBusAssign();break;
+			case 13: createStop();break;
+			case 14: createRoute();break;
+			case 15: updateStop();break;
+			case 16: updateRoute();break;
+			case 17: deleteStop();break;
+			case 18: deleteRoute();break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -479,6 +477,29 @@ public class Project {
 				System.out.println("Success: Route updated");
 			else
 				System.out.println("Error: A route does not exist with that route number");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void createBusAssign()
+	{
+		System.out.print("Driver License: ");
+		String driverLicense = in.nextLine();
+		System.out.print("License Plate: ");
+		String licensePlate = in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Last Maintenance Date (yyyy-mm-dd): ");
+		String lastMain = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO busassign VALUES ('%s', '%s', '%d', '%s')", driverLicense, licensePlate, routeNum, lastMain));
+
+			if(numRows > 0)
+				System.out.println("Success: Assigned bus/driver to route");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
