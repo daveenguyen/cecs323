@@ -136,7 +136,7 @@ public class Project {
 			case 2:  listPassportRoutes();break;
 			case 3:  getDirections();break;
 			case 4:  getDirectionsOneTransfer();break;
-			case 5:  System.out.println("OPTION = case 5: ");break;
+			case 5:  listBetween();break;
 			case 6:  listArrivalTimes();break;
 			case 7:  listRouteData();break;
 			case 8:  listDrivers();break;
@@ -280,6 +280,44 @@ public class Project {
 		catch (SQLException e) {
 			System.out.println(e.toString());
 		}
+	}
+	static void listBetween() {
+		System.out.print("Enter route number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Enter starting stop number: ");
+		int startStopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Enter ending stop number: ");
+		int endStopNum = in.nextInt();
+		in.nextLine();
+		
+		if (startStopNum == endStopNum)
+		{
+			System.out.println("Error: End and start stops are the same");
+			return;
+		}
+
+		System.out.println("Querying between stops...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT stopNum FROM arrivetime WHERE time > (SELECT time FROM arrivetime WHERE stopNum = '%d' AND routeNum = '%d' ORDER BY time LIMIT 1) and time < (SELECT time FROM arrivetime WHERE stopNum = '%d' AND routeNum = '%d' ORDER BY time LIMIT 1) AND routeNum = '%d' ORDER BY time", startStopNum, routeNum, endStopNum, routeNum, routeNum));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %5s\n", "Stop", "Second");
+				while(result.next()) {
+					int stopNum = result.getInt("stopNum");
+					System.out.format("%3d: %5d\n", ++n, stopNum);
+				}
+			}
+			else
+				System.out.println("Error: Can't determine in between stop");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}		
 	}
 	static void listArrivalTimes() {
 		System.out.print("Enter route number: ");
