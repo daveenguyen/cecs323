@@ -126,8 +126,8 @@ public class Project {
 			case 0:  System.out.println("OPTION = case 0: ");break;
 			case 1:  listRoutes();break;
 			case 2:  listPassportRoutes();break;
-			case 3:  getDirection();break;
-			case 4:  System.out.println("OPTION = case 4: ");break;
+			case 3:  getDirections();break;
+			case 4:  getDirectionsOneTransfer();break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
 			case 6:  listArrivalTimes();break;
 			case 7:  listRouteData();break;
@@ -196,33 +196,7 @@ public class Project {
 			System.out.println(e.toString());
 		}
 	}
-	static void listArrivalTimes() {
-		System.out.print("Enter route number: ");
-		int routeNum = in.nextInt();
-		in.nextLine();
-		System.out.println("Querying arrival time data...");
-		try {
-			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery(String.format("SELECT stopNum, time FROM arriveTime WHERE routeNum = '%d' ORDER BY time", routeNum));
-
-			if(result.isBeforeFirst())
-			{
-				int n = 0;
-				System.out.format("  #  %5s%9s\n", "Stop", "Time");
-				while(result.next()) {
-					int stopNum = result.getInt("stopNum");
-					String time = result.getString("time");
-					System.out.format("%3d: %5d%9s\n", ++n, stopNum, time);
-				}
-			}
-			else
-				System.out.println("0 rows returned");
-		}
-		catch (SQLException e) {
-			System.out.println(e.toString());
-		}
-	}
-	static void getDirection() {
+	static void getDirections() {
 		System.out.print("Enter starting stop number: ");
 		int startStopNum = in.nextInt();
 		in.nextLine();
@@ -248,6 +222,69 @@ public class Project {
 				while(result.next()) {
 					int routeNum = result.getInt("routeNum");
 					System.out.format("%3d: %4d\n", ++n, routeNum);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void getDirectionsOneTransfer() {
+		System.out.print("Enter starting stop number: ");
+		int startStopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Enter ending stop number: ");
+		int endStopNum = in.nextInt();
+		in.nextLine();
+
+		if (startStopNum == endStopNum)
+		{
+			System.out.println("Error: End and start stops are the same");
+			return;
+		}
+
+		System.out.println("Querying direction...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT t1.routeNum, t1.stopNum, t2.routeNum AS 'otherRouteNum' FROM (SELECT DISTINCT stopNum, routeNum FROM arrivetime AS end WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t1 INNER JOIN (SELECT DISTINCT stopNum, routeNum FROM arrivetime AS end WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t2 ON t1.stopNum = t2.stopNum", startStopNum, endStopNum));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %5s%5s%7s\n", "First", "Stop", "Second");
+				while(result.next()) {
+					int routeNum = result.getInt("routeNum");
+					int stopNum = result.getInt("stopNum");
+					int otherRouteNum = result.getInt("otherRouteNum");
+					System.out.format("%3d: %5d%5d%7d\n", ++n, routeNum, stopNum, otherRouteNum);
+				}
+			}
+			else
+				System.out.println("No directions possible with one change of bus.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listArrivalTimes() {
+		System.out.print("Enter route number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.println("Querying arrival time data...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT stopNum, time FROM arriveTime WHERE routeNum = '%d' ORDER BY time", routeNum));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %5s%9s\n", "Stop", "Time");
+				while(result.next()) {
+					int stopNum = result.getInt("stopNum");
+					String time = result.getString("time");
+					System.out.format("%3d: %5d%9s\n", ++n, stopNum, time);
 				}
 			}
 			else
