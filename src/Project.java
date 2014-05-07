@@ -166,16 +166,17 @@ public class Project {
 		System.out.println("Querying routes...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM route");
+			ResultSet result = stmt.executeQuery("SELECT * FROM routedata");
 
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
-				System.out.format("  #  %3s%12s\n", "Num", "Direction");
+				System.out.format("  #  %3s%12s%9s\n", "Num", "Direction", "Passport");
 				while(result.next()) {
 					int routeNum = result.getInt("routeNum");
 					String direction = result.getString("direction");
-					System.out.format("%3d: %3d%12s\n", ++n, routeNum, direction);
+					boolean passport = result.getBoolean("isPassport");
+					System.out.format("%3d: %3d%12s%9s\n", ++n, routeNum, direction, passport ? "Yes" : "No");
 				}
 			}
 			else
@@ -337,7 +338,7 @@ public class Project {
 		System.out.println("Querying drivers...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM driver");
+			ResultSet result = stmt.executeQuery("SELECT * FROM driverdata");
 
 			if(result.isBeforeFirst())
 			{
@@ -363,7 +364,7 @@ public class Project {
 		System.out.println("Querying stops...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM stop");
+			ResultSet result = stmt.executeQuery("SELECT * FROM stopdata");
 
 			if(result.isBeforeFirst())
 			{
@@ -386,7 +387,7 @@ public class Project {
 		System.out.println("Querying service reports...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM servicereport");
+			ResultSet result = stmt.executeQuery("SELECT * FROM reportdata");
 
 			if(result.isBeforeFirst())
 			{
