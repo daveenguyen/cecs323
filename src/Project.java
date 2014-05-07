@@ -156,7 +156,7 @@ public class Project {
 			case 21: listBusAssign();break;
 			case 22: //createDriver();break;
 			case 23: //listBusMaint();break;
-			case 24: //listBusAging();break;
+			case 24: listOldBus();break;
 			case 25: listDriverTest();break;
 			default: System.out.println("OPTION = default:");break;
 		}
@@ -685,6 +685,37 @@ public class Project {
 					String address = result.getString("address");
 					String lastQTest = result.getString("lastQTest");
 					System.out.format("%3d: %8s%22s%4d%11s%33s\n", ++n, driverLicense, name, age, lastQTest, address);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+	static void listOldBus()
+	{
+		System.out.println("Querying bus data ...");
+		try {
+			Statement stmt   = conn.createStatement();
+			Date date = new Date();
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+
+			int oldYear = Integer.parseInt(sdf.format(date)) - 9;
+
+			ResultSet result = stmt.executeQuery(String.format("SELECT * FROM vehicleinfo WHERE year <= '%d'", oldYear));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %22s%8s\n", "License Place", "Year");
+				while(result.next()) {
+					String licensePlate = result.getString("licensePlate");
+					int year = result.getInt("year");
+					System.out.format("%3d:  %22s%8d\n", ++n, licensePlate, year);
 				}
 			}
 			else
