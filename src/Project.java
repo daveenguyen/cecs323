@@ -139,7 +139,7 @@ public class Project {
 			case 14: createStop();break;
 			case 15: createRoute();break;
 			case 16: updateStop();break;
-			case 17: System.out.println("OPTION = case 17:");break;
+			case 17: updateRoute();break;
 			case 18: deleteStop();break;
 			case 19: deleteRoute();break;
 			default: System.out.println("OPTION = default:");break;
@@ -213,7 +213,12 @@ public class Project {
 		System.out.print("Enter ending stop number: ");
 		int endStopNum = in.nextInt();
 		in.nextLine();
-		// if start == end?
+
+		if (startStopNum == endStopNum)
+		{
+			System.out.println("Error: End and start stops are the same");
+			return;
+		}
 
 		System.out.println("Querying direction...");
 		try {
@@ -443,6 +448,37 @@ public class Project {
 				System.out.println("Success: Stop updated");
 			else
 				System.out.println("Error: A stop does not exist with that stop number");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void updateRoute()
+	{
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Direction (NS or WE): ");
+		String direction = in.nextLine();
+		int dir = 0;
+		if(direction.compareTo("NS") == 0)
+			direction = "north/south";
+		else if(direction.compareTo("WE") == 0)
+			direction = "west/east";
+		else
+		{
+			System.out.println("Error: Invalid direction");
+			return;
+		}
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("UPDATE route SET direction = '%s' WHERE routeNum = %d", direction, routeNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Route updated");
+			else
+				System.out.println("Error: A route does not exist with that route number");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
