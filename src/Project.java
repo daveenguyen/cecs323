@@ -104,13 +104,15 @@ public class Project {
 			System.out.println("\t9.  List of all the stops");
 			System.out.println("\t10. List of the service reports");
 			System.out.println("\t11. Assign stop to route");
-			System.out.println("\t12. Assign bus/driver to route");
-			System.out.println("\t13. Create new bus stop");
-			System.out.println("\t14. Create new route");
-			System.out.println("\t15. Update stop");
-			System.out.println("\t16. Update route");
-			System.out.println("\t17. Delete stop");
-			System.out.println("\t18. Delete route");
+			System.out.println("\t12. Unassign stop to route");
+			System.out.println("\t13. Assign bus/driver to route");
+			System.out.println("\t14. Unassign bus/driver to route");
+			System.out.println("\t15. Create new bus stop");
+			System.out.println("\t16. Create new route");
+			System.out.println("\t17. Update stop");
+			System.out.println("\t18. Update route");
+			System.out.println("\t19. Delete stop");
+			System.out.println("\t20. Delete route");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -133,13 +135,15 @@ public class Project {
 			case 9:  listStops();break;
 			case 10: listServiceReports();break;
 			case 11: createArriveTime();break;
-			case 12: createBusAssign();break;
-			case 13: createStop();break;
-			case 14: createRoute();break;
-			case 15: updateStop();break;
-			case 16: updateRoute();break;
-			case 17: deleteStop();break;
-			case 18: deleteRoute();break;
+			case 12: deleteArrivalTimes();break;
+			case 13: createBusAssign();break;
+			case 14: deleteBusAssign();break;
+			case 15: createStop();break;
+			case 16: createRoute();break;
+			case 17: updateStop();break;
+			case 18: updateRoute();break;
+			case 19: deleteStop();break;
+			case 20: deleteRoute();break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -151,7 +155,9 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM route");
-
+		
+			System.out.println(result.toString());
+			
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -355,6 +361,57 @@ public class Project {
 			System.out.println(e.toString());
 		}
 	}
+	static void createArriveTime()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Time (hh:mm): ");
+		String time = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO arrivetime VALUES ('%d', '%d', '%s')", routeNum, stopNum, time));
+
+			if(numRows > 0)
+				System.out.println("Success: Assigned stop to route");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void deleteArrivalTimes()
+	{
+	}
+	static void createBusAssign()
+	{
+		System.out.print("Driver License: ");
+		String driverLicense = in.nextLine();
+		System.out.print("License Plate: ");
+		String licensePlate = in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Last Maintenance Date (yyyy-mm-dd): ");
+		String lastMain = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO busassign VALUES ('%s', '%s', '%d', '%s')", driverLicense, licensePlate, routeNum, lastMain));
+
+			if(numRows > 0)
+				System.out.println("Success: Assigned bus/driver to route");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void deleteBusAssign()
+	{
+	}
 	static void createStop()
 	{
 		System.out.print("Stop Number: ");
@@ -381,7 +438,6 @@ public class Project {
 		in.nextLine();
 		System.out.print("Direction (NS or WE): ");
 		String direction = in.nextLine();
-		int dir = 0;
 		if(direction.compareTo("NS") == 0)
 			direction = "north/south";
 		else if(direction.compareTo("WE") == 0)
@@ -401,6 +457,57 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: A route already exists with that route number");
+		}
+	}
+	static void updateStop()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Cross Streets: ");
+		String crossStreets = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("UPDATE stop SET crossStreets = '%s' WHERE stopNum=%s", crossStreets, stopNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Stop updated");
+			else
+				System.out.println("Error: A stop does not exist with that stop number");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void updateRoute()
+	{
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Direction (NS or WE): ");
+		String direction = in.nextLine();
+		if(direction.compareTo("NS") == 0)
+			direction = "north/south";
+		else if(direction.compareTo("WE") == 0)
+			direction = "west/east";
+		else
+		{
+			System.out.println("Error: Invalid direction");
+			return;
+		}
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("UPDATE route SET direction = '%s' WHERE routeNum = %d", direction, routeNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Route updated");
+			else
+				System.out.println("Error: A route does not exist with that route number");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
 		}
 	}
 	static void deleteStop()
@@ -439,103 +546,6 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: The route is referenced by another item in the database");
-		}
-	}
-	static void updateStop()
-	{
-		System.out.print("Stop Number: ");
-		int stopNum = in.nextInt();
-		in.nextLine();
-		System.out.print("Cross Streets: ");
-		String crossStreets = in.nextLine();
-
-		try {
-			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("UPDATE stop SET crossStreets = '%s' WHERE stopNum=%s", crossStreets, stopNum));
-
-			if(numRows > 0)
-				System.out.println("Success: Stop updated");
-			else
-				System.out.println("Error: A stop does not exist with that stop number");
-		}
-		catch (SQLException e) {
-			System.out.println(e.toString());
-		}
-	}
-	static void updateRoute()
-	{
-		System.out.print("Route Number: ");
-		int routeNum = in.nextInt();
-		in.nextLine();
-		System.out.print("Direction (NS or WE): ");
-		String direction = in.nextLine();
-		int dir = 0;
-		if(direction.compareTo("NS") == 0)
-			direction = "north/south";
-		else if(direction.compareTo("WE") == 0)
-			direction = "west/east";
-		else
-		{
-			System.out.println("Error: Invalid direction");
-			return;
-		}
-
-		try {
-			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("UPDATE route SET direction = '%s' WHERE routeNum = %d", direction, routeNum));
-
-			if(numRows > 0)
-				System.out.println("Success: Route updated");
-			else
-				System.out.println("Error: A route does not exist with that route number");
-		}
-		catch (SQLException e) {
-			System.out.println(e.toString());
-		}
-	}
-	static void createBusAssign()
-	{
-		System.out.print("Driver License: ");
-		String driverLicense = in.nextLine();
-		System.out.print("License Plate: ");
-		String licensePlate = in.nextLine();
-		System.out.print("Route Number: ");
-		int routeNum = in.nextInt();
-		in.nextLine();
-		System.out.print("Last Maintenance Date (yyyy-mm-dd): ");
-		String lastMain = in.nextLine();
-
-		try {
-			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("INSERT INTO busassign VALUES ('%s', '%s', '%d', '%s')", driverLicense, licensePlate, routeNum, lastMain));
-
-			if(numRows > 0)
-				System.out.println("Success: Assigned bus/driver to route");
-		}
-		catch (SQLException e) {
-			System.out.println(e.toString());
-		}
-	}
-	static void createArriveTime()
-	{
-		System.out.print("Stop Number: ");
-		int stopNum = in.nextInt();
-		in.nextLine();
-		System.out.print("Route Number: ");
-		int routeNum = in.nextInt();
-		in.nextLine();
-		System.out.print("Time (hh:mm): ");
-		String time = in.nextLine();
-
-		try {
-			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("INSERT INTO arrivetime VALUES ('%d', '%d', '%s')", routeNum, stopNum, time));
-
-			if(numRows > 0)
-				System.out.println("Success: Assigned stop to route");
-		}
-		catch (SQLException e) {
-			System.out.println(e.toString());
 		}
 	}
 }
