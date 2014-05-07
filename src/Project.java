@@ -261,7 +261,7 @@ public class Project {
 		System.out.println("Querying direction...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT t1.routeNum, t1.stopNum, t2.routeNum AS 'otherRouteNum' FROM (SELECT DISTINCT stopNum, routeNum FROM arrivetime AS end WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t1 INNER JOIN (SELECT DISTINCT stopNum, routeNum FROM arrivetime AS end WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t2 ON t1.stopNum = t2.stopNum", startStopNum, endStopNum));
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT t1.routeNum, t1.stopNum, t2.routeNum AS 'otherRouteNum' FROM (SELECT DISTINCT stopNum, routeNum FROM arrivetime WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t1 INNER JOIN (SELECT DISTINCT stopNum, routeNum FROM arrivetime WHERE routeNum IN (SELECT DISTINCT routeNum FROM arrivetime WHERE stopNum = '%d')) AS t2 ON t1.stopNum = t2.stopNum", startStopNum, endStopNum));
 
 			if(result.isBeforeFirst())
 			{
