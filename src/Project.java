@@ -113,6 +113,12 @@ public class Project {
 			System.out.println("\t18. Update route");
 			System.out.println("\t19. Delete stop");
 			System.out.println("\t20. Delete route");
+			System.out.println("\nBUSINESS RULES options");
+			System.out.println("\t21. View all drivers and bus they're assigned to");
+			System.out.println("\t22. Add driver");
+			System.out.println("\t24. List all buses that are almost due for maintenance");
+			System.out.println("\t25. List all buses that are almost too old");
+			System.out.println("\t23. List all drivers that are almost due for retest");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -144,6 +150,11 @@ public class Project {
 			case 18: updateRoute();break;
 			case 19: deleteStop();break;
 			case 20: deleteRoute();break;
+			case 21: break;
+			case 22: break;
+			case 23: break;
+			case 24: break;
+			case 25: break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -155,7 +166,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM route");
-					
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -426,7 +437,7 @@ public class Project {
 		System.out.print("Route Number: ");
 		int routeNum = in.nextInt();
 		in.nextLine();
-		
+
 		try {
 			Statement stmt   = conn.createStatement();
 			int numRows = stmt.executeUpdate(String.format("DELETE FROM arrivetime WHERE routeNum = '%d' and stopNum = %d", routeNum, stopNum));
