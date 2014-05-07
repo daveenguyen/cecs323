@@ -97,7 +97,7 @@ public class Project {
 			System.out.println("\t3.  Get directions from stop A to stop B (without bus transfer)");
 			System.out.println("\t4.  Get directions from stop A to stop B (with 1 bus transfer)");
 			System.out.println("\t5.  Get stops on route (between stop A and B)");
-			System.out.println("\t6.  Get arrival times for stop");
+			System.out.println("\t6.  Get arrival times for route");
 			System.out.println("\nADMIN options");
 			System.out.println("\t7.  List all the data for a given route");
 			System.out.println("\t8.  List of all the bus drivers");
@@ -197,22 +197,22 @@ public class Project {
 		}
 	}
 	static void listArrivalTimes() {
-		System.out.print("Enter stop number: ");
-		int targetStopNum = in.nextInt();
+		System.out.print("Enter route number: ");
+		int routeNum = in.nextInt();
 		in.nextLine();
 		System.out.println("Querying arrival time data...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery(String.format("SELECT routeNum, time FROM arriveTime WHERE stopNum = '%d' ORDER BY time", targetStopNum));
+			ResultSet result = stmt.executeQuery(String.format("SELECT stopNum, time FROM arriveTime WHERE routeNum = '%d' ORDER BY time", routeNum));
 
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
-				System.out.format("  #  %5s%9s\n", "Route", "Time");
+				System.out.format("  #  %5s%9s\n", "Stop", "Time");
 				while(result.next()) {
-					int routeNum = result.getInt("routeNum");
+					int stopNum = result.getInt("stopNum");
 					String time = result.getString("time");
-					System.out.format("%3d: %5d%9s\n", ++n, routeNum, time);
+					System.out.format("%3d: %5d%9s\n", ++n, stopNum, time);
 				}
 			}
 			else
