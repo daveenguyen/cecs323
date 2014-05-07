@@ -136,11 +136,11 @@ public class Project {
 			case 11: System.out.println("OPTION = case 11:");break;
 			case 12: System.out.println("OPTION = case 12:");break;
 			case 13: System.out.println("OPTION = case 13:");break;
-			case 14: createBusStop();break;
+			case 14: createStop();break;
 			case 15: System.out.println("OPTION = case 15:");break;
 			case 16: System.out.println("OPTION = case 16:");break;
 			case 17: System.out.println("OPTION = case 17:");break;
-			case 18: System.out.println("OPTION = case 18:");break;
+			case 18: deleteStop();break;
 			case 19: System.out.println("OPTION = case 19:");break;
 			default: System.out.println("OPTION = default:");break;
 		}
@@ -309,7 +309,7 @@ public class Project {
 			System.out.println(e.toString());
 		}
 	}
-	static void createBusStop()
+	static void createStop()
 	{
 		System.out.print("Stop Number: ");
 		int stopNum = in.nextInt();
@@ -328,6 +328,25 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: A stop already exists with that stop number.");
+		}
+	}
+	static void deleteStop()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("DELETE FROM stop WHERE stopNum = %d", stopNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Stop deleted.");
+			else
+				System.out.println("Error: A stop does not exist with that stop number.");
+		}
+		catch (SQLException e) {
+			System.out.println("Error: The stop is referenced by another item in the database.");
 		}
 	}
 }
