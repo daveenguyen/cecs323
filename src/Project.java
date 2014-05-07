@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;  // for standard JDBC programs
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Project {
@@ -116,9 +119,9 @@ public class Project {
 			System.out.println("\nBUSINESS RULES options");
 			System.out.println("\t21. View all drivers and bus they're assigned to");
 			System.out.println("\t22. Add driver");
-			System.out.println("\t24. List all buses that are almost due for maintenance");
-			System.out.println("\t25. List all buses that are almost too old");
-			System.out.println("\t23. List all drivers that are almost due for retest");
+			System.out.println("\t23. List all buses that are almost due for maintenance");
+			System.out.println("\t24. List all buses that are almost too old");
+			System.out.println("\t25. List all drivers that are almost due for retest");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -150,11 +153,11 @@ public class Project {
 			case 18: updateRoute();break;
 			case 19: deleteStop();break;
 			case 20: deleteRoute();break;
-			case 21: break;
-			case 22: break;
-			case 23: break;
-			case 24: break;
-			case 25: break;
+			case 21: listBusAssign();break;
+			case 22: //createDriver();break;
+			case 23: //listBusMaint();break;
+			case 24: //listBusAging();break;
+			case 25: listDriverTest();break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -631,6 +634,64 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: The route is referenced by another item in the database");
+		}
+	}
+	static void listBusAssign()
+	{
+		System.out.println("Querying drivers and bus ...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM busassign");
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %14s%14s\n", "Driver License", "License Plate");
+				while(result.next()) {
+					String driverLicense = result.getString("driverLicense");
+					String licensePlate = result.getString("licensePlate");
+					System.out.format("%3d: %14s%14s\n", ++n, driverLicense, licensePlate);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listDriverTest()
+	{
+		System.out.println("Querying drivers and bus ...");
+		try {
+			Statement stmt   = conn.createStatement();
+			Date date = new Date();
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.MONTH, -5);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			ResultSet result = stmt.executeQuery(String.format("SELECT * FROM driver WHERE lastQTest < '%s'", sdf.format(c.getTime())));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %8s%22s%4s%11s%33s\n", "License", "Name", "Age", "Qualified", "Address");
+				while(result.next()) {
+					String driverLicense = result.getString("driverLicense");
+					String name = result.getString("name");
+					int age = result.getInt("age");
+					String address = result.getString("address");
+					String lastQTest = result.getString("lastQTest");
+					System.out.format("%3d: %8s%22s%4d%11s%33s\n", ++n, driverLicense, name, age, lastQTest, address);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
 		}
 	}
 }
