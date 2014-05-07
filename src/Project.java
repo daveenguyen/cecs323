@@ -118,10 +118,9 @@ public class Project {
 			System.out.println("\t20. Delete route");
 			System.out.println("\nBUSINESS RULES options");
 			System.out.println("\t21. View all drivers and bus they're assigned to");
-			System.out.println("\t22. Add driver");
-			System.out.println("\t23. List all buses that are almost due for maintenance");
-			System.out.println("\t24. List all buses that are almost too old");
-			System.out.println("\t25. List all drivers that are almost due for retest");
+			System.out.println("\t22. List all buses that are almost due for maintenance");
+			System.out.println("\t23. List all buses that are almost too old");
+			System.out.println("\t24. List all drivers that are almost due for retest");
 			System.out.println("\t0.  Exit Program");
 	}
 
@@ -154,10 +153,9 @@ public class Project {
 			case 19: deleteStop();break;
 			case 20: deleteRoute();break;
 			case 21: listBusAssign();break;
-			case 22: //createDriver();break;
-			case 23: listBusMaint();break;
-			case 24: listOldBus();break;
-			case 25: listDriverTest();break;
+			case 22: listBusMaint();break;
+			case 23: listOldBus();break;
+			case 24: listDriverTest();break;
 			default: System.out.println("OPTION = default:");break;
 		}
 		confirm();
@@ -317,7 +315,7 @@ public class Project {
 		System.out.println("Querying route data...");
 		try {
 			Statement stmt   = conn.createStatement();
-			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT stopNum FROM arriveTime WHERE routeNum = '%d'", targetRouteNum));
+			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT stopNum FROM arriveTime WHERE routeNum = '%d' ORDER BY time", targetRouteNum));
 
 			if(result.isBeforeFirst())
 			{
