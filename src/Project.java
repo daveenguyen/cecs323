@@ -315,12 +315,11 @@ public class Project {
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
-				System.out.format("  #  %3s%33s%25s\n", "Num", "Cross-Streets", "Place");
+				System.out.format("  #  %3s%33s\n", "Num", "Cross-Streets");
 				while(result.next()) {
 					int stopNum = result.getInt("stopNum");
 					String crossStreets = result.getString("crossStreets");
-					String place = result.getString("place");
-					System.out.format("%3d: %3d%33s%25s\n", ++n, stopNum, crossStreets, place);
+					System.out.format("%3d: %3d%33s\n", ++n, stopNum, crossStreets);
 				}
 			}
 			else
@@ -363,12 +362,10 @@ public class Project {
 		in.nextLine();
 		System.out.print("Cross Streets: ");
 		String crossStreets = in.nextLine();
-		System.out.print("Place: ");
-		String place = in.nextLine();
 
 		try {
 			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("INSERT INTO stop VALUES ('%d', '%s', '%s')", stopNum, crossStreets, place));
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO stop VALUES ('%d', '%s')", stopNum, crossStreets));
 
 			if(numRows > 0)
 				System.out.println("Success: Stop created");
