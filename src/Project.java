@@ -662,7 +662,7 @@ public class Project {
 	}
 	static void listDriverTest()
 	{
-		System.out.println("Querying drivers and bus ...");
+		System.out.println("Querying drivers test dates ...");
 		try {
 			Statement stmt   = conn.createStatement();
 			Date date = new Date();
@@ -677,14 +677,14 @@ public class Project {
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
-				System.out.format("  #  %8s%22s%4s%11s%33s\n", "License", "Name", "Age", "Qualified", "Address");
+				System.out.format("  #  %8s%22s%4s%33s%11s\n", "License", "Name", "Age", "Address", "Qualified");
 				while(result.next()) {
 					String driverLicense = result.getString("driverLicense");
 					String name = result.getString("name");
 					int age = result.getInt("age");
 					String address = result.getString("address");
 					String lastQTest = result.getString("lastQTest");
-					System.out.format("%3d: %8s%22s%4d%11s%33s\n", ++n, driverLicense, name, age, lastQTest, address);
+					System.out.format("%3d: %8s%22s%4d%33s%11s\n", ++n, driverLicense, name, age, address, lastQTest);
 				}
 			}
 			else
