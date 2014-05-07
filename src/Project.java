@@ -137,7 +137,7 @@ public class Project {
 			case 12: System.out.println("OPTION = case 12:");break;
 			case 13: System.out.println("OPTION = case 13:");break;
 			case 14: createStop();break;
-			case 15: System.out.println("OPTION = case 15:");break;
+			case 15: createRoute();break;
 			case 16: System.out.println("OPTION = case 16:");break;
 			case 17: System.out.println("OPTION = case 17:");break;
 			case 18: deleteStop();break;
@@ -165,7 +165,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 
 			if(result.isBeforeFirst())
 				while(result.next()) {
@@ -174,7 +174,7 @@ public class Project {
 					System.out.println("Route " + routeNum + " (" + direction + ")");
 				}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -200,7 +200,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -227,7 +227,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -253,7 +253,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -277,7 +277,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -303,7 +303,7 @@ public class Project {
 				}
 			}
 			else
-				System.out.println("0 rows returned.");
+				System.out.println("0 rows returned");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
@@ -324,12 +324,41 @@ public class Project {
 			int numRows = stmt.executeUpdate(String.format("INSERT INTO stop VALUES ('%d', '%s', '%s')", stopNum, crossStreets, place));
 
 			if(numRows > 0)
-				System.out.println("Success: Stop created.");
+				System.out.println("Success: Stop created");
 		}
 		catch (SQLException e) {
-			System.out.println("Error: A stop already exists with that stop number.");
+			System.out.println("Error: A stop already exists with that stop number");
 		}
 	}
+	static void createRoute()
+	{
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Direction (NS or WE): ");
+		String direction = in.nextLine();
+		int dir = 0;
+		if(direction.compareTo("NS") == 0)
+			direction = "north/south";
+		else if(direction.compareTo("WE") == 0)
+			direction = "west/east";
+		else
+		{
+			System.out.println("Error: Invalid direction");
+			return;
+		}
+		
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO route VALUES ('%s', '%d')", direction, routeNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Route created");
+		}
+		catch (SQLException e) {
+			System.out.println("Error: A route already exists with that route number");
+		}
+	}	
 	static void deleteStop()
 	{
 		System.out.print("Stop Number: ");
@@ -341,12 +370,12 @@ public class Project {
 			int numRows = stmt.executeUpdate(String.format("DELETE FROM stop WHERE stopNum = %d", stopNum));
 
 			if(numRows > 0)
-				System.out.println("Success: Stop deleted.");
+				System.out.println("Success: Stop deleted");
 			else
-				System.out.println("Error: A stop does not exist with that stop number.");
+				System.out.println("Error: A stop does not exist with that stop number");
 		}
 		catch (SQLException e) {
-			System.out.println("Error: The stop is referenced by another item in the database.");
+			System.out.println("Error: The stop is referenced by another item in the database");
 		}
 	}
 	static void deleteRoute()
@@ -360,12 +389,12 @@ public class Project {
 			int numRows = stmt.executeUpdate(String.format("DELETE FROM route WHERE routeNum = %d", routeNum));
 
 			if(numRows > 0)
-				System.out.println("Success: Route deleted.");
+				System.out.println("Success: Route deleted");
 			else
-				System.out.println("Error: A route does not exist with that route number.");
+				System.out.println("Error: A route does not exist with that route number");
 		}
 		catch (SQLException e) {
-			System.out.println("Error: The route is referenced by another item in the database.");
+			System.out.println("Error: The route is referenced by another item in the database");
 		}
 	}
 }
