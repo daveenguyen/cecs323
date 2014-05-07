@@ -136,7 +136,7 @@ public class Project {
 			case 11: System.out.println("OPTION = case 11:");break;
 			case 12: System.out.println("OPTION = case 12:");break;
 			case 13: System.out.println("OPTION = case 13:");break;
-			case 14: System.out.println("OPTION = case 14:");break;
+			case 14: createBusStop();break;
 			case 15: System.out.println("OPTION = case 15:");break;
 			case 16: System.out.println("OPTION = case 16:");break;
 			case 17: System.out.println("OPTION = case 17:");break;
@@ -307,6 +307,27 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
+		}
+	}
+	static void createBusStop()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Cross Streets: ");
+		String crossStreets = in.nextLine();
+		System.out.print("Place: ");
+		String place = in.nextLine();
+		
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO stop VALUES ('%d', '%s', '%s')", stopNum, crossStreets, place));
+
+			if(numRows > 0)
+				System.out.println("Success: Stop created.");
+		}
+		catch (SQLException e) {
+			System.out.println("Error: A stop already exists with that stop number.");
 		}
 	}
 }
