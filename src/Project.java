@@ -573,14 +573,19 @@ public class Project {
 			return;
 		}
 
+		System.out.print("Is Passport: ");
+		boolean isPassport = in.nextInt() != 0;
+		in.nextLine();
+
 		try {
 			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("INSERT INTO route VALUES ('%s', '%d')", direction, routeNum));
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO route VALUES ('%s', '%d', '%s')", direction, routeNum, isPassport ? "1" : "0"));
 
 			if(numRows > 0)
 				System.out.println("Success: Route created");
 		}
 		catch (SQLException e) {
+			System.out.println(e.toString());
 			System.out.println("Error: A route already exists with that route number");
 		}
 	}
@@ -621,10 +626,13 @@ public class Project {
 			System.out.println("Error: Invalid direction");
 			return;
 		}
+		System.out.print("Is Passport: ");
+		boolean isPassport = in.nextInt() != 0;
+		in.nextLine();
 
 		try {
 			Statement stmt   = conn.createStatement();
-			int numRows = stmt.executeUpdate(String.format("UPDATE route SET direction = '%s' WHERE routeNum = %d", direction, routeNum));
+			int numRows = stmt.executeUpdate(String.format("UPDATE route SET direction = '%s', isPassport = '%d' WHERE routeNum = %d", direction, isPassport ? 1 : 0, routeNum));
 
 			if(numRows > 0)
 				System.out.println("Success: Route updated");
