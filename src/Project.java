@@ -383,6 +383,25 @@ public class Project {
 	}
 	static void deleteArrivalTimes()
 	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("DELETE FROM arrivetime WHERE routeNum = '%d' and stopNum = %d", routeNum, stopNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Unassign stop from route");
+			else
+				System.out.println("Error: That stop isn't assigned to that route");
+		}
+		catch (SQLException e) {
+			System.out.println("Error: That association is referenced by another item in the database");
+		}
 	}
 	static void createBusAssign()
 	{
@@ -427,7 +446,6 @@ public class Project {
 				System.out.println("Error: A bus assignment does not exist with those parameters");
 		}
 		catch (SQLException e) {
-			System.out.println(e.toString());
 			System.out.println("Error: The bus assignment is referenced by another item in the database");
 		}
 	}
