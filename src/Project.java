@@ -668,11 +668,11 @@ public class Project {
 			Date date = new Date();
 			Calendar c = Calendar.getInstance();
 			c.setTime(date);
-			c.add(Calendar.MONTH, -5);
+			c.add(Calendar.MONTH, -11);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-			ResultSet result = stmt.executeQuery(String.format("SELECT * FROM driver WHERE lastQTest < '%s'", sdf.format(c.getTime())));
+			ResultSet result = stmt.executeQuery(String.format("SELECT * FROM driver WHERE lastQTest <= '%s'", sdf.format(c.getTime())));
 
 			if(result.isBeforeFirst())
 			{
