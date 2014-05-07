@@ -1,4 +1,4 @@
-//package project;
+package project;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -132,7 +132,7 @@ public class Project {
 			case 7:  listRouteData();break;
 			case 8:  listDrivers();break;
 			case 9:  listStops();break;
-			case 10: System.out.println("OPTION = case 10:");break;
+			case 10: listServiceReports();break;
 			case 11: System.out.println("OPTION = case 11:");break;
 			case 12: System.out.println("OPTION = case 12:");break;
 			case 13: System.out.println("OPTION = case 13:");break;
@@ -274,6 +274,32 @@ public class Project {
 					String crossStreets = result.getString("crossStreets");
 					String place = result.getString("place");
 					System.out.format("%3d: %3d%33s%25s\n", ++n, stopNum, crossStreets, place);
+				}
+			}
+			else
+				System.out.println("0 rows returned.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listServiceReports() {
+		System.out.println("Querying service reports...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM servicereport");
+			
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %8s%22s%10s\n", "License", "Date/Time", "Status");
+				while(result.next()) {
+					String license = result.getString("driverLicense");
+					String dateTime = result.getString("dateTime");
+					String status = result.getString("reportType");
+					String description = result.getString("description");
+					System.out.format("%3d: %8s%22s%10s\n", ++n, license, dateTime, status);
+					System.out.format("      - %s\n", description);
 				}
 			}
 			else
