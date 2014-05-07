@@ -138,7 +138,7 @@ public class Project {
 			case 13: System.out.println("OPTION = case 13:");break;
 			case 14: createStop();break;
 			case 15: createRoute();break;
-			case 16: System.out.println("OPTION = case 16:");break;
+			case 16: updateStop();break;
 			case 17: System.out.println("OPTION = case 17:");break;
 			case 18: deleteStop();break;
 			case 19: deleteRoute();break;
@@ -425,6 +425,27 @@ public class Project {
 		}
 		catch (SQLException e) {
 			System.out.println("Error: The route is referenced by another item in the database");
+		}
+	}
+	static void updateStop()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Cross Streets: ");
+		String crossStreets = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("UPDATE stop SET crossStreets = '%s' WHERE stopNum=%s", crossStreets, stopNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Stop updated");
+			else
+				System.out.println("Error: A stop does not exist with that stop number");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
 		}
 	}
 }
