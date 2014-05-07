@@ -119,13 +119,13 @@ public class Project {
 		System.out.println("Press ENTER to continue...");
 		in.nextLine();
 	}
-	
+
 	static void parseOption(int option) {
 		switch (option) {
 			case 0:  System.out.println("OPTION = case 0: ");break;
 			case 1:  listRoutes();break;
 			case 2:  System.out.println("OPTION = case 2: ");break;
-			case 3:  System.out.println("OPTION = case 3: ");break;
+			case 3:  getDirection();break;
 			case 4:  System.out.println("OPTION = case 4: ");break;
 			case 5:  System.out.println("OPTION = case 5: ");break;
 			case 6:  listArrivalTimes();break;
@@ -188,7 +188,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery(String.format("SELECT routeNum, time FROM arriveTime WHERE stopNum = '%d' ORDER BY time", targetStopNum));
-			
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -206,7 +206,37 @@ public class Project {
 			System.out.println(e.toString());
 		}
 	}
-	
+	static void getDirection() {
+		System.out.print("Enter starting stop number: ");
+		int startStopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Enter ending stop number: ");
+		int endStopNum = in.nextInt();
+		in.nextLine();
+		// if start == end?
+
+		System.out.println("Querying direction...");
+		try {
+			Statement stmt   = conn.createStatement();
+			ResultSet result = stmt.executeQuery(String.format("SELECT t1.routeNum FROM  (SELECT * FROM arrivetime WHERE stopnum='%d') as t1 INNER JOIN (SELECT * FROM arrivetime WHERE stopnum='%d') as t2 ON t1.routeNum=t2.routeNum", startStopNum, endStopNum));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %4s\n", "Route");
+				while(result.next()) {
+					int routeNum = result.getInt("routeNum");
+					System.out.format("%3d: %4d\n", ++n, routeNum);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+
 	// Admin Functions
 	static void listRouteData() {
 		System.out.print("Enter route number: ");
@@ -216,7 +246,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery(String.format("SELECT DISTINCT stopNum FROM arriveTime WHERE routeNum = '%d'", targetRouteNum));
-			
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -238,7 +268,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM driver");
-			
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -264,7 +294,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM stop");
-			
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -288,7 +318,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM servicereport");
-			
+
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -318,7 +348,7 @@ public class Project {
 		String crossStreets = in.nextLine();
 		System.out.print("Place: ");
 		String place = in.nextLine();
-		
+
 		try {
 			Statement stmt   = conn.createStatement();
 			int numRows = stmt.executeUpdate(String.format("INSERT INTO stop VALUES ('%d', '%s', '%s')", stopNum, crossStreets, place));
@@ -347,7 +377,7 @@ public class Project {
 			System.out.println("Error: Invalid direction");
 			return;
 		}
-		
+
 		try {
 			Statement stmt   = conn.createStatement();
 			int numRows = stmt.executeUpdate(String.format("INSERT INTO route VALUES ('%s', '%d')", direction, routeNum));
@@ -358,13 +388,13 @@ public class Project {
 		catch (SQLException e) {
 			System.out.println("Error: A route already exists with that route number");
 		}
-	}	
+	}
 	static void deleteStop()
 	{
 		System.out.print("Stop Number: ");
 		int stopNum = in.nextInt();
 		in.nextLine();
-		
+
 		try {
 			Statement stmt   = conn.createStatement();
 			int numRows = stmt.executeUpdate(String.format("DELETE FROM stop WHERE stopNum = %d", stopNum));
@@ -383,7 +413,7 @@ public class Project {
 		System.out.print("Route Number: ");
 		int routeNum = in.nextInt();
 		in.nextLine();
-		
+
 		try {
 			Statement stmt   = conn.createStatement();
 			int numRows = stmt.executeUpdate(String.format("DELETE FROM route WHERE routeNum = %d", routeNum));
