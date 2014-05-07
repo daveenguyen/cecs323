@@ -132,7 +132,7 @@ public class Project {
 			case 8:  listDrivers();break;
 			case 9:  listStops();break;
 			case 10: listServiceReports();break;
-			case 11: System.out.println("OPTION = case 11:");break;
+			case 11: createArriveTime();break;
 			case 12: createBusAssign();break;
 			case 13: createStop();break;
 			case 14: createRoute();break;
@@ -500,6 +500,28 @@ public class Project {
 
 			if(numRows > 0)
 				System.out.println("Success: Assigned bus/driver to route");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void createArriveTime()
+	{
+		System.out.print("Stop Number: ");
+		int stopNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+		System.out.print("Time (hh:mm): ");
+		String time = in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("INSERT INTO arrivetime VALUES ('%d', '%d', '%s')", routeNum, stopNum, time));
+
+			if(numRows > 0)
+				System.out.println("Success: Assigned stop to route");
 		}
 		catch (SQLException e) {
 			System.out.println(e.toString());
