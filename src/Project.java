@@ -155,9 +155,7 @@ public class Project {
 		try {
 			Statement stmt   = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM route");
-		
-			System.out.println(result.toString());
-			
+					
 			if(result.isBeforeFirst())
 			{
 				int n = 0;
@@ -411,6 +409,27 @@ public class Project {
 	}
 	static void deleteBusAssign()
 	{
+		System.out.print("Driver License: ");
+		String driverLicense = in.nextLine();
+		System.out.print("License Plate: ");
+		String licensePlate = in.nextLine();
+		System.out.print("Route Number: ");
+		int routeNum = in.nextInt();
+		in.nextLine();
+
+		try {
+			Statement stmt   = conn.createStatement();
+			int numRows = stmt.executeUpdate(String.format("DELETE FROM busassign WHERE driverLicense = '%s' and licensePlate = '%s' and routeNum = %d", driverLicense, licensePlate, routeNum));
+
+			if(numRows > 0)
+				System.out.println("Success: Bus assignment deleted");
+			else
+				System.out.println("Error: A bus assignment does not exist with those parameters");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+			System.out.println("Error: The bus assignment is referenced by another item in the database");
+		}
 	}
 	static void createStop()
 	{
