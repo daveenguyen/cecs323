@@ -155,7 +155,7 @@ public class Project {
 			case 20: deleteRoute();break;
 			case 21: listBusAssign();break;
 			case 22: //createDriver();break;
-			case 23: //listBusMaint();break;
+			case 23: listBusMaint();break;
 			case 24: listOldBus();break;
 			case 25: listDriverTest();break;
 			default: System.out.println("OPTION = default:");break;
@@ -716,6 +716,37 @@ public class Project {
 					String licensePlate = result.getString("licensePlate");
 					int year = result.getInt("year");
 					System.out.format("%3d:  %22s%8d\n", ++n, licensePlate, year);
+				}
+			}
+			else
+				System.out.println("0 rows returned");
+		}
+		catch (SQLException e) {
+			System.out.println(e.toString());
+		}
+	}
+	static void listBusMaint()
+	{
+		System.out.println("Querying bus maintenance dates ...");
+		try {
+			Statement stmt   = conn.createStatement();
+			Date date = new Date();
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.MONTH, -5);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			ResultSet result = stmt.executeQuery(String.format("SELECT * FROM busassign WHERE lastMain <= '%s'", sdf.format(c.getTime())));
+
+			if(result.isBeforeFirst())
+			{
+				int n = 0;
+				System.out.format("  #  %22s%22s\n", "License Place", "Last Maintenance");
+				while(result.next()) {
+					String licensePlate = result.getString("licensePlate");
+					String lastMain = result.getString("lastMain");
+					System.out.format("%3d:  %22s%22s\n", ++n, licensePlate, lastMain);
 				}
 			}
 			else
